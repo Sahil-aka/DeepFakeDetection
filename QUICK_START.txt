@@ -1,0 +1,30 @@
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║     🚀 UPLOAD YOUR PROJECT TO GITHUB - QUICK GUIDE 🚀     ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+
+📌 EASIEST METHOD:
+   Double-click: upload_to_github.bat
+
+📌 MANUAL METHOD:
+   1. Open Command Prompt here
+   2. Run: git add .
+   3. Run: git commit -m "Update project"
+   4. Run: git push
+
+📌 YOUR REPOSITORY:
+   https://github.com/Sahil-aka/DeepFakeDetection
+
+📌 IMPORTANT:
+   ⚠️  Model file (*.h5) is NOT uploaded (too large)
+   ✅  All code and documentation IS uploaded
+   ✅  Users can train their own model
+
+📌 NEED HELP?
+   Read: READY_TO_UPLOAD.md
+   Read: GITHUB_UPLOAD_GUIDE.md
+
+╔════════════════════════════════════════════════════════════╗
+║  After uploading, check your GitHub repo and add topics!   ║
+╚════════════════════════════════════════════════════════════╝

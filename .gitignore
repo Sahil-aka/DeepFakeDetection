@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE - PyCharm
+.idea/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Logs
+logs/
+*.log
+
+# Dataset directories
+data/Dataset/
+data/dataset/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.bak
+
+# Large Model Files (Ignored to avoid LFS)
+*.h5
+*.keras
+*.h5 
+*.keras 
+# Large files 
+*.h5 
+*.keras 
+__pycache__/ 
+.idea/ 
+.venv/ 
