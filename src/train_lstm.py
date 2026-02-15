@@ -17,7 +17,7 @@ try:
     if gpus:
         for gpu in gpus:
             tf.config.experimental.set_memory_growth(gpu, True)
-        # Try to limit to ~3500 MB for GTX1650
+    
         try:
             tf.config.set_logical_device_configuration(
                 gpus[0],
