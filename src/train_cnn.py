@@ -1,12 +1,4 @@
 # src/train_cnn.py
-"""
-Safe training script for basic CNN on a memory-constrained laptop (GTX 1650).
-- Enables GPU memory growth
-- Sets an optional per-process GPU memory limit (MB)
-- Uses smaller IMG_SIZE and BATCH by default
-- Uses conservative tf.data settings (no full in-RAM caching)
-- Logs via stdout (suitable for redirecting to a file)
-"""
 
 import os
 import tensorflow as tf
@@ -20,7 +12,6 @@ try:
     if gpus:
         for gpu in gpus:
             tf.config.experimental.set_memory_growth(gpu, True)
-        # Try to limit to ~3500 MB for GTX1650 (adjust down if you still get OOM)
         try:
             tf.config.set_logical_device_configuration(
                 gpus[0],
