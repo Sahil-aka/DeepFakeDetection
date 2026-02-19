@@ -144,12 +144,15 @@ async def predict(file: UploadFile = File(...)):
         # Convert to percentage
         confidence = float(prediction) * 100
         
-        # Determine label (sigmoid output: 0 = Real, 1 = Fake)
-        is_fake = prediction > 0.5
-        label = "Fake" if is_fake else "Real"
+        # Determine label (sigmoid output: 0 = Fake, 1 = Real)
+        # prediction > 0.5 means closer to 1 (Real)
+        is_real = prediction > 0.5
+        label = "Real" if is_real else "Fake"
         
         # Adjust confidence for display
-        display_confidence = confidence if is_fake else (100 - confidence)
+        # If Real (p > 0.5), confidence is p * 100
+        # If Fake (p <= 0.5), confidence is (1 - p) * 100
+        display_confidence = confidence if is_real else (100 - confidence)
         
         return JSONResponse(content={
             "success": True,
@@ -157,9 +160,9 @@ async def predict(file: UploadFile = File(...)):
             "confidence": round(display_confidence, 2),
             "raw_score": round(float(prediction), 4),
             "details": {
-                "is_fake": bool(is_fake),
-                "fake_probability": round(confidence, 2),
-                "real_probability": round(100 - confidence, 2)
+                "is_fake": not is_real,
+                "fake_probability": round(100 - confidence, 2),
+                "real_probability": round(confidence, 2)
             }
         })
         
