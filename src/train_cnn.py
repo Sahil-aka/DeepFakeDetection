@@ -1,8 +1,8 @@
 # src/train_cnn.py
 
-import os
-import tensorflow as tf
 from pathlib import Path
+
+import tensorflow as tf
 
 # ---------- GPU safety / memory settings ----------
 # Enable memory growth and attempt to set a soft per-process GPU memory limit.
@@ -44,6 +44,7 @@ LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 # ---------- Utility: build simple CNN ----------
 from tensorflow.keras import layers, models
+
 
 def build_basic_cnn(input_shape=(160,160,3)):
     inputs = layers.Input(shape=input_shape)

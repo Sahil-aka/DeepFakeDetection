@@ -1,6 +1,8 @@
 # src/train_resnext.py
-import tensorflow as tf
 from pathlib import Path
+
+import tensorflow as tf
+
 from src.data_utils import make_image_datasets
 from src.model_resnext import build_resnext
 

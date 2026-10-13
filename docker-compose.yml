@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: deepfake-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8080,http://127.0.0.1:8080,http://localhost:8000
+    volumes:
+      - ./models:/app/models
+      - ./temp_uploads:/app/temp_uploads
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+
+  frontend:
+    image: nginx:alpine
+    container_name: deepfake-frontend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+    restart: unless-stopped

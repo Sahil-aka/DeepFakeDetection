@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deepfake Detection - AI-Powered Image Verification</title>
+    <title>Deepfake Detection - AI-Powered Media Verification</title>
+    <meta name="description" content="Detect deepfake images and videos using advanced PyTorch AI models. Upload any image or video for instant authenticity verification.">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,11 +22,34 @@
                 </svg>
                 <h1>Deepfake Detector</h1>
             </div>
-            <p class="subtitle">AI-Powered Image Authenticity Verification</p>
+            <p class="subtitle">AI-Powered Image & Video Authenticity Verification</p>
+            <div class="status-pill" id="apiStatus">
+                <span class="status-dot"></span>
+                <span class="status-text">Checking...</span>
+            </div>
         </header>
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Mode Selector -->
+            <section class="mode-selector">
+                <button class="mode-btn active" id="modeImage" data-mode="image">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 15L16 10L5 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Image
+                </button>
+                <button class="mode-btn" id="modeVideo" data-mode="video">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="23 7 16 12 23 17 23 7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Video
+                </button>
+            </section>
+
             <!-- Upload Section -->
             <section class="upload-section">
                 <div class="upload-card" id="dropZone">
@@ -36,7 +60,7 @@
                             <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <h2 class="upload-title">Drop your image here</h2>
+                    <h2 class="upload-title" id="uploadTitle">Drop your image here</h2>
                     <p class="upload-description">or click to browse</p>
                     <input type="file" id="fileInput" accept="image/*" hidden>
                     <button class="browse-btn" id="browseBtn">
@@ -47,11 +71,11 @@
                         </svg>
                         Browse Files
                     </button>
-                    <p class="file-info">Supports: JPG, PNG, JPEG</p>
+                    <p class="file-info" id="fileInfo">Supports: JPG, PNG, JPEG, WEBP</p>
                 </div>
             </section>
 
-            <!-- Preview Section -->
+            <!-- Preview Section (Image) -->
             <section class="preview-section" id="previewSection" style="display: none;">
                 <div class="preview-card">
                     <h3 class="section-title">Image Preview</h3>
@@ -68,16 +92,51 @@
                 </div>
             </section>
 
+            <!-- Preview Section (Video) -->
+            <section class="preview-section" id="videoPreviewSection" style="display: none;">
+                <div class="preview-card">
+                    <h3 class="section-title">Video Preview</h3>
+                    <div class="video-container">
+                        <video id="videoPreview" controls></video>
+                    </div>
+                    <div class="video-options">
+                        <label class="option-label">
+                            Frames to analyze:
+                            <select id="maxFramesSelect">
+                                <option value="10">10 (Fast)</option>
+                                <option value="20">20</option>
+                                <option value="30" selected>30 (Recommended)</option>
+                                <option value="50">50 (Thorough)</option>
+                                <option value="100">100 (Maximum)</option>
+                            </select>
+                        </label>
+                    </div>
+                    <button class="analyze-btn" id="analyzeVideoBtn">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="23 7 16 12 23 17 23 7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Analyze Video
+                    </button>
+                </div>
+            </section>
+
             <!-- Loading Section -->
             <section class="loading-section" id="loadingSection" style="display: none;">
                 <div class="loading-card">
                     <div class="spinner"></div>
-                    <h3 class="loading-title">Analyzing Image...</h3>
-                    <p class="loading-description">Our AI is examining the image for deepfake patterns</p>
+                    <h3 class="loading-title" id="loadingTitle">Analyzing...</h3>
+                    <p class="loading-description" id="loadingDescription">Our AI is examining the media for deepfake patterns</p>
+                    <div class="loading-progress" id="loadingProgress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">Processing frames...</span>
+                    </div>
                 </div>
             </section>
 
-            <!-- Results Section -->
+            <!-- Results Section (Image) -->
             <section class="results-section" id="resultsSection" style="display: none;">
                 <div class="results-card">
                     <h3 class="section-title">Analysis Results</h3>
@@ -108,6 +167,22 @@
                                 <span class="detail-value" id="fakeProb">4.5%</span>
                             </div>
                         </div>
+
+                        <!-- Grad-CAM Section -->
+                        <div class="gradcam-section" style="margin-top: 20px;">
+                            <button class="explain-btn" id="explainBtn">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px;">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                Explain Decision (Grad-CAM)
+                            </button>
+                            <div id="gradcamBox" style="display: none; margin-top: 16px; text-align: center;">
+                                <h4 style="font-size: 14px; margin-bottom: 8px; color: #94a3b8;">Spatial Manipulation Heatmap</h4>
+                                <img id="gradcamImg" src="" alt="Grad-CAM Heatmap" style="max-width: 260px; width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); margin: 0 auto; display: block;" />
+                                <p style="font-size: 12px; color: #94a3b8; margin-top: 6px;">Warm colors (red/yellow) indicate spatial regions flagged as manipulated.</p>
+                            </div>
+                        </div>
                     </div>
                     <button class="reset-btn" id="resetBtn">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -115,7 +190,70 @@
                             <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M20.49 9C19.9828 7.56678 19.1209 6.28536 17.9845 5.27542C16.8482 4.26548 15.4745 3.55976 13.9917 3.22426C12.5089 2.88875 10.9652 2.93434 9.50481 3.35677C8.04437 3.77921 6.71475 4.56471 5.64 5.64L1 10M23 14L18.36 18.36C17.2853 19.4353 15.9556 20.2208 14.4952 20.6432C13.0348 21.0657 11.4911 21.1112 10.0083 20.7757C8.52547 20.4402 7.1518 19.7345 6.01547 18.7246C4.87913 17.7146 4.01717 16.4332 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        Analyze Another Image
+                        Analyze Another
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section (Video) -->
+            <section class="video-results-section" id="videoResultsSection" style="display: none;">
+                <div class="results-card">
+                    <h3 class="section-title">Video Analysis Results</h3>
+                    <div class="result-content">
+                        <!-- Overall Verdict -->
+                        <div class="result-badge" id="videoResultBadge">
+                            <svg class="result-icon" id="videoResultIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
+                            <span class="result-label" id="videoResultLabel">Real</span>
+                        </div>
+                        <div class="confidence-container">
+                            <div class="confidence-header">
+                                <span class="confidence-label">Overall Confidence</span>
+                                <span class="confidence-value" id="videoConfidenceValue">95.5%</span>
+                            </div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="videoConfidenceFill"></div>
+                            </div>
+                        </div>
+
+                        <!-- Video Summary Stats -->
+                        <div class="video-summary" id="videoSummary">
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <span class="summary-value" id="totalFrames">0</span>
+                                    <span class="summary-label">Frames Analyzed</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-value" id="fakeFrames">0</span>
+                                    <span class="summary-label">Fake Frames</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-value" id="realFrames">0</span>
+                                    <span class="summary-label">Real Frames</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-value" id="fakeRatio">0%</span>
+                                    <span class="summary-label">Fake Ratio</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Frame Timeline -->
+                        <div class="frame-timeline" id="frameTimeline">
+                            <h4 class="timeline-title">Frame-by-Frame Analysis</h4>
+                            <div class="timeline-bar" id="timelineBar"></div>
+                            <div class="timeline-legend">
+                                <span class="legend-item legend-real"><span class="legend-dot real"></span> Real</span>
+                                <span class="legend-item legend-fake"><span class="legend-dot fake"></span> Fake</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="reset-btn" id="videoResetBtn">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20.49 9C19.9828 7.56678 19.1209 6.28536 17.9845 5.27542C16.8482 4.26548 15.4745 3.55976 13.9917 3.22426C12.5089 2.88875 10.9652 2.93434 9.50481 3.35677C8.04437 3.77921 6.71475 4.56471 5.64 5.64L1 10M23 14L18.36 18.36C17.2853 19.4353 15.9556 20.2208 14.4952 20.6432C13.0348 21.0657 11.4911 21.1112 10.0083 20.7757C8.52547 20.4402 7.1518 19.7345 6.01547 18.7246C4.87913 17.7146 4.01717 16.4332 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Analyze Another
                     </button>
                 </div>
             </section>
@@ -137,7 +275,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>Powered by CNN Deep Learning Model</p>
+            <p>Powered by PyTorch Deep Learning Model &bull; Image & Video Analysis</p>
         </footer>
     </div>
 

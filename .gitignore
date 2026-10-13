@@ -1,49 +1,84 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
 
-# Virtual environments
+# Virtual Environments
 .venv/
 venv/
 ENV/
 env/
+env.bak/
+venv.bak/
 
-# IDE - PyCharm
-.idea/
+# Large Model Weights (Exclude from git to respect GitHub 100MB limit)
+# Trained weights are downloaded via `python scripts/download_models.py`
+*.pt
+*.pth
+*.h5
+*.keras
+*.bin
+*.onnx
+*.safetensors
+*.tflite
+*.weights
+models/*.pt
+models/*.pth
+models/*.h5
+models/*.keras
+!models/.gitkeep
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# Temporary Uploads & Media Files
+temp_uploads/
+uploads/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
 
-# Logs
+# Testing & Coverage
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Logs & Runtime
 logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Dataset directories
+# Datasets
+data/
 data/Dataset/
 data/dataset/
+Dataset/
+dataset/
 
-# OS files
-.DS_Store
-Thumbs.db
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+
+# IDE & Editor Files
+.idea/
+.vscode/
 *.swp
 *.swo
 *~
+.ipynb_checkpoints/
 
-# Temporary files
-*.tmp
-*.bak
-
-# Large Model Files (Ignored to avoid LFS)
-*.h5
-*.keras
-*.h5 
-*.keras 
-# Large files 
-*.h5 
-*.keras 
-__pycache__/ 
-.idea/ 
-.venv/ 
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

@@ -1,6 +1,6 @@
 # src/model_cnn.py
-import tensorflow as tf
 from tensorflow.keras import layers, models
+
 
 def build_basic_cnn(input_shape=(224,224,3)):
     """

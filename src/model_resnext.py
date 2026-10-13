@@ -1,6 +1,6 @@
 # src/model_resnext.py
-import tensorflow as tf
 from tensorflow.keras import layers, models
+
 
 def build_resnext(input_shape=(160,160,3), classes=1):
     """
