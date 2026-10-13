@@ -1,3 +1,13 @@
+---
+title: CertiMedia
+emoji: 🛡️
+colorFrom: indigo
+colorTo: purple
+sdk: gradio
+app_file: app_gradio.py
+pinned: false
+---
+
 # DeepFake Detection — Production Ensemble System
 
 [![CI](https://github.com/Sahil-aka/DeepFakeDetection/actions/workflows/ci.yml/badge.svg)](https://github.com/Sahil-aka/DeepFakeDetection/actions)
