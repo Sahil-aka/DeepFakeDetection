@@ -1,0 +1,16 @@
+name: Sync to Hugging Face
+on:
+  push:
+    branches: [ main ]
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Push to HF
+        run: git push --force https://sahilaka:$HF_TOKEN@huggingface.co/spaces/sahilaka/CertiMedia main
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
