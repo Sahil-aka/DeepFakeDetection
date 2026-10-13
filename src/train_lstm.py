@@ -7,9 +7,9 @@ Training script for LSTM model on a memory-constrained laptop (GTX 1650).
 - Uses conservative tf.data settings
 """
 
-import os
-import tensorflow as tf
 from pathlib import Path
+
+import tensorflow as tf
 
 # ---------- GPU safety / memory settings ----------
 try:

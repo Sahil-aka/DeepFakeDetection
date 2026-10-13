@@ -1,6 +1,7 @@
 # src/data_utils.py
-import tensorflow as tf
 from pathlib import Path
+
+import tensorflow as tf
 
 AUTOTUNE = tf.data.AUTOTUNE
 

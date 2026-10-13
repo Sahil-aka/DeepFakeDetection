@@ -5,9 +5,10 @@ Loads all three trained models (CNN, ResNeXt, LSTM) and evaluates them individua
 and as an ensemble on the test set.
 """
 
-import tensorflow as tf
-from pathlib import Path
 import sys
+from pathlib import Path
+
+import tensorflow as tf
 
 # ---------- GPU safety / memory settings ----------
 try:
@@ -26,6 +27,7 @@ BATCH = 8
 
 # ---------- Import ensemble model ----------
 from model_ensemble import EnsembleModel
+
 
 # ---------- Data pipeline ----------
 def make_test_dataset(base_dir=BASE_DIR, img_size=IMG_SIZE, batch=BATCH):

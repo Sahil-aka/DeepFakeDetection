@@ -1,7 +1,9 @@
 # src/model_ensemble.py
-import tensorflow as tf
-import numpy as np
 from pathlib import Path
+
+import numpy as np
+import tensorflow as tf
+
 
 class EnsembleModel:
     """
@@ -105,7 +107,7 @@ class EnsembleModel:
         
         # Convert to numpy arrays
         all_labels = np.array(all_labels)
-        for name in all_preds.keys():
+        for name in all_preds:
             all_preds[name] = np.array(all_preds[name])
         
         # Calculate metrics

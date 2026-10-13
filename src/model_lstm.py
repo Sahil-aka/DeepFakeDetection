@@ -2,6 +2,7 @@
 import tensorflow as tf
 from tensorflow.keras import layers, models
 
+
 def build_lstm(input_shape=(160,160,3)):
     """
     LSTM-based model for deepfake detection.
